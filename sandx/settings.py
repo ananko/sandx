@@ -46,6 +46,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 )
 
 ROOT_URLCONF = 'sandx.urls'
@@ -102,3 +103,10 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
+# Rollbar setup
+ROLLBAR = {
+    'access_token': 'd883fbbffc3d4e569b7e23dec9f3b432',
+    'environment': 'development' if DEBUG else 'production',
+    'branch': 'master',
+    'root': '/absolute/path/to/code/root',
+}
