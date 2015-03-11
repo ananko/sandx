@@ -110,3 +110,4 @@ ROLLBAR = {
     'branch': 'master',
     'root': '/absolute/path/to/code/root',
 }
+
