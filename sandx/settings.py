@@ -54,6 +54,8 @@ SOCIALACCOUNT_PROVIDERS = \
             name='Google',
             openid_url='https://www.google.com/accounts/o8/id')]}}
 
+LOGIN_REDIRECT_URL = '/'
+
 # Application definition
 
 INSTALLED_APPS = (

@@ -1,0 +1,79 @@
+{%extends 'sandbox/base.html'%}
+{% load account %}
+
+{%block content%}
+{%for error in errors%}
+<div class="alert alert-warning alert-dismissable" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	<h4>Warning</h4>
+	<p>{{error}}</p>
+</div>
+{%endfor%}
+{%for note in notes%}
+<div class="shadow-z-2">
+	<div class="row">
+		<div class="col-md-8">
+	<p>{{note}}</p>
+		</div>
+		<div class="col-md-3">
+	<p><i>Created {{note.created|timesince}} ago</i></p>
+		</div>
+		<div class="col-md-1">
+			<button onclick="deleteNote({{note.id}})" note_id="{{note.id}}" type="button" class="btn btn-flat btn-default">
+				<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+			</button>
+		</div>
+	</div>
+</div>
+{%endfor%}
+<div class="container">
+	<button class="btn bt-fab btn-raised btn-primary bottom-right" data-toggle="modal" data-target="#newNoteModal" style="display: inline"><i class="mdi-image-edit"></i></button>
+</div>
+<div class="modal" id="newNoteModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form class="form-horizontal" action="{%url 'sandbox:notes'%}" method="post">
+				{%csrf_token%}
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">&times;</span></button>
+					<legend>New note</legend>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<div class="col-lg-10">
+							<textarea id="id_content" name="content" class="form-control" rows="3">
+							</textarea>
+							<span class="help-block">Note content</span>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Add</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{%endblock%}
+
+{% block page-scripts %}
+<script>
+function deleteNote(note_id) {
+	var result = confirm("Are you sure want to delete this note?");
+	if (result) {
+		var del_form = document.createElement("form");
+		var csrf = document.createElement("input");
+		csrf.setAttribute("type", "hidden");
+		csrf.setAttribute("name", "csrfmiddlewaretoken");
+		csrf.setAttribute("value", "{{csrf_token}}");
+		del_form.appendChild(csrf);
+		del_form.setAttribute("method", "post");
+		del_form.setAttribute("action", "/sandbox/notes/" + note_id.toString() + "/delete");
+		del_form.submit();
+	}
+}
+</script>
+
+{%endblock%}
+
